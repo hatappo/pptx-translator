@@ -9,29 +9,39 @@
    (com.amazonaws.services.translate.model TranslateTextRequest TranslateTextResult)
    (org.apache.poi.xslf.usermodel XMLSlideShow XSLFShape XSLFTextShape XSLFSlide)))
 
-(def ts (time/format "yyyyMMddHHmmss" (time/local-date-time)))
 (def region "ap-northeast-1")
-(def srclang "ko") ; possible values @see https://docs.aws.amazon.com/translate/latest/dg/how-it-works.html
-(def tgtlang "ja") ; possible values @see https://docs.aws.amazon.com/translate/latest/dg/how-it-works.html
-(def infile "./resources/test.pptx")
-(def outfile (str infile ".translated-at-" ts ".pptx"))
+; (def ts (time/format "yyyyMMddHHmmss" (time/local-date-time)))
+; (def srclang "ko") ; possible values @see https://docs.aws.amazon.com/translate/latest/dg/how-it-works.html
+; (def tgtlang "ja") ; possible values @see https://docs.aws.amazon.com/translate/latest/dg/how-it-works.html
+; (def org "./resources/test.pptx")
+; (def dst (str org ".translated-at-" ts ".pptx"))
 
-(with-open [ppt (XMLSlideShow. (io/input-stream infile))]
-  (doseq [slide (.getSlides ppt)]
-    (doseq [shape (.getShapes slide)
-            :when (instance? XSLFTextShape shape)
-            :let [text (.getText shape)
-                  newtext (translate (str text))]]
-      (-> shape .getTextBody (.setText newtext))))
-  (with-open [dst (io/output-stream outfile)]
-    (.write ppt dst)))
-
-(defn- translate [text]
+(defn- translate [text lang-from lang-to]
   (if-not (do (println text) (= 0 (-> text str clojure.string/trim .length)))
     (let [awsCreds (DefaultAWSCredentialsProviderChain/getInstance)
           b (AmazonTranslateClient/builder)
           tr (-> b (.withCredentials (AWSStaticCredentialsProvider. (.getCredentials awsCreds))) (.withRegion region) .build)
-          req (-> (TranslateTextRequest.) (.withText (str text)) (.withSourceLanguageCode srclang) (.withTargetLanguageCode tgtlang))
+          req (-> (TranslateTextRequest.) (.withText (str text)) (.withSourceLanguageCode lang-from) (.withTargetLanguageCode lang-to))
           result (.translateText tr req)
           translated-text (.getTranslatedText result)]
       translated-text)))
+
+(defn- translate-pptx [org dst lang-from lang-to]
+  (with-open [ppt (XMLSlideShow. (io/input-stream org))]
+    (doseq [slide (.getSlides ppt)]
+      (doseq [shape (.getShapes slide)
+              :when (instance? XSLFTextShape shape)
+              :let [text (.getText shape)
+                    newtext (translate (str text) lang-from lang-to)]]
+        (-> shape .getTextBody (.setText newtext))))
+    (with-open [dst (io/output-stream dst)]
+      (.write ppt dst))))
+
+(defn -main []
+  (let [ts (time/format "yyyyMMddHHmmss" (time/local-date-time))
+        org "./resources/test.pptx"
+        dst (str org ".translated-at-" ts ".pptx")
+        from "ko"
+        to "ja"]
+    (translate-pptx org dst from to)))
+

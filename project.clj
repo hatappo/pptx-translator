@@ -7,4 +7,5 @@
                  [clojure.java-time "0.3.2"]
                  [com.amazonaws/aws-java-sdk "1.11.652"]
                  [org.apache.poi/poi "4.1.0"]
-                 [org.apache.poi/poi-ooxml "4.1.0"]])
+                 [org.apache.poi/poi-ooxml "4.1.0"]]
+  :main ppt-tr.core)
