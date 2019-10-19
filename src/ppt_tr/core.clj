@@ -10,12 +10,8 @@
    (org.apache.poi.xslf.usermodel XMLSlideShow XSLFShape XSLFTextShape XSLFSlide)))
 
 (def region "ap-northeast-1")
-; (def ts (time/format "yyyyMMddHHmmss" (time/local-date-time)))
-; (def srclang "ko") ; possible values @see https://docs.aws.amazon.com/translate/latest/dg/how-it-works.html
-; (def tgtlang "ja") ; possible values @see https://docs.aws.amazon.com/translate/latest/dg/how-it-works.html
-; (def org "./resources/test.pptx")
-; (def dst (str org ".translated-at-" ts ".pptx"))
 
+; possible values as lang-from lang-to @see https://docs.aws.amazon.com/translate/latest/dg/how-it-works.html
 (defn- translate [text lang-from lang-to]
   (if-not (do (println text) (= 0 (-> text str clojure.string/trim .length)))
     (let [awsCreds (DefaultAWSCredentialsProviderChain/getInstance)
