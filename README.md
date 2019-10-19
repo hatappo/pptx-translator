@@ -1,13 +1,29 @@
 # ppt-tr
 
-A sample code.
+Translate text elements in a PowerPoint file ( `pptx` ).
 
-Traverse objects in a PowerPoint file which has `pptx` extension, extract all (almost) text elements, translate using Amazon Translate, and output as a new file.
+Traverse objects in a PowerPoint file which has `pptx` extension, extract all (almost) text elements, translate using `Amazon Translate`, and output as a new file.
+
+**NOTE:**
+The `Presentation Translator` add-in is often more convenient.
+https://www.microsoft.com/en-us/download/details.aspx?id=55024
+
+
+## Prerequisites
+
+* Installed [Leiningen](https://leiningen.org/).
+* Your AWS account is set up ( **because this use `Amazon Translate` service** ).
+* The AWS account profile is set up in your local.
+
 
 ## Usage
 
-In the default, a target input file is `resources/test.pptx` and output file is `resources/test.pptx.translated-at-{yyyyMMddHHMMss}.pptx`
-You can change it because it's written in the source code directly.
+Just `lein run`.
+
+In the default, a source file is `resources/test.pptx` and output as `resources/test.pptx.translated-at-{yyyyMMddHHMMss}.pptx`.
+You can change it. It's written in the `-main` method directly.
+Same in the source and target languages.
+
 
 ## TODO
 
@@ -15,6 +31,7 @@ You can change it because it's written in the source code directly.
 * translate "Note" objects.
 * lgging for processing time.
 * ...
+
 
 ## Reference
 
