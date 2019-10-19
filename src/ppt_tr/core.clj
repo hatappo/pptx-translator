@@ -27,7 +27,6 @@
     (.write ppt dst)))
 
 (defn- translate [text]
-  ; (do (println text))
   (if-not (do (println text) (= 0 (-> text str clojure.string/trim .length)))
     (let [awsCreds (DefaultAWSCredentialsProviderChain/getInstance)
           b (AmazonTranslateClient/builder)
@@ -36,6 +35,3 @@
           result (.translateText tr req)
           translated-text (.getTranslatedText result)]
       translated-text)))
-
-(defn- translate-mock [text]
-  (str "☆☆☆" text "★★★"))
