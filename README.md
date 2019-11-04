@@ -32,6 +32,18 @@ Same in the source and target languages.
 * lgging for processing time.
 * ...
 
+## Sample
+
+from a input file
+
+<img src="doc-resources/slide-1.ko.jpeg" alt="attach:cat" title="attach:cat" width="45%">
+<img src="doc-resources/slide-2.ko.jpeg" alt="attach:cat" title="attach:cat" width="45%">
+
+to a output file
+
+<img src="doc-resources/slide-1.ja.jpeg" alt="attach:cat" title="attach:cat" width="45%">
+<img src="doc-resources/slide-2.ja.jpeg" alt="attach:cat" title="attach:cat" width="45%">
+
 
 ## Reference
 
